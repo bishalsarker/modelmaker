@@ -11,10 +11,12 @@ namespace ModelMaker
     public class Model
     {
         private int statusCode { get; set; }
-
         private SqlConnection conn;
-        private EntityMap map = new EntityMap();
 
+        public Model(string connectionString)
+        {
+            setConnectionString(connectionString);
+        }
         public void Exec(string query)
         {
             if (connOpen())
@@ -29,7 +31,7 @@ namespace ModelMaker
                 setStatus(500);
             }
         }
-        public List<T> Read<T>(string query)
+        public List<T> Read<T>(string query, EntityMap entityMap)
         {
             List<T> objList = new List<T>();
             Type objType = typeof(T);
@@ -45,7 +47,7 @@ namespace ModelMaker
                     while (i < reader.FieldCount)
                     {
                         string fName = reader.GetName(i);
-                        string pName = map.GetProperty(fName);
+                        string pName = entityMap.GetProperty(fName);
                         PropertyInfo prop = objType.GetProperty(pName);
                         if (prop != null)
                         {
@@ -87,21 +89,6 @@ namespace ModelMaker
             }
             return count;
         }
-
-        public void setConnectionString(string connStr)
-        {
-            conn = new SqlConnection(connStr);
-        }
-        public void CreateEntityMap(string[] connections)
-        {
-            foreach (string conn in connections)
-            {
-                string[] splits = conn.Split(':');
-                string pName = splits[0].Trim();
-                string fName = splits[1].Trim();
-                map.AddConnection(pName, fName);
-            }
-        }
         public int getStatus()
         {
             return statusCode;
@@ -135,12 +122,27 @@ namespace ModelMaker
         {
             statusCode = code;
         }
+        private void setConnectionString(string connStr)
+        {
+            conn = new SqlConnection(connStr);
+        }
 
     }
 
     public class EntityMap
     {
         private Dictionary<string, string> map = new Dictionary<string, string>();
+
+        public EntityMap(string[] connections)
+        {
+            foreach (string conn in connections)
+            {
+                string[] splits = conn.Split(':');
+                string pName = splits[0].Trim();
+                string fName = splits[1].Trim();
+                AddConnection(pName, fName);
+            }
+        }
 
         public void AddConnection(string propertyName, string fieldName)
         {
