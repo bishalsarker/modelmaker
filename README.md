@@ -54,7 +54,7 @@ namespace modelMakerTest
 See, no extra code hassles. Just a single function to execute queries. This example was for no return command. Now, it's time to read our data tables. Before we begin let's know about a class that is required to used ``Read<T>()`` method:
 
 ### ModelMaker.EntityMap (string[] connections) class
-We need to create an EntityMap object to map our properties of class to table columns. We will use a spacial syntax for one connection:
+We need to create an EntityMap object to map our properties of class to table columns. We will use a spacial syntax for one connection: <br> <br>
 ```class-property-name : table-column-name```
 
 We need an array of these connections to map all our properties to columns. Let's create one:
