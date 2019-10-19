@@ -9,6 +9,26 @@ or, goto: https://www.nuget.org/packages/ModelMaker/
 
 
 ## Documentation
+We need to understand the basic structure of a data model in ModelMaker. We make data models in the Data Access Layer (DAL) in a 3-Layer or N-Layer Application which are responsible for handling database operations. There will one data model for each table.
+
+### ModelMaker.Model (string connectionString) Class
+A data model class will be a derived class of base class ``ModelMaker.Model`` and will consist of some of it's properties and methods. It's a basic structure of a data model:
+
+``` c#
+
+class StudentModel : Model
+    {
+        private static string connStr = "connection string";   
+        public StudentModel() : base(connStr) 
+        { 
+        
+        }
+    }
+
+```
+
+This is how we make a subclass of ``ModelMaker.Model`` class. Now let's dive deep into it.
+
 There are two basic operations in ModelMaker:
 1. ``Exec() [void]`` --> for queries that return no results (insert, update, delete)
 2. ``Read<T>(string query, EntityMap entityMap)`` --> for queries that return results (select)
@@ -119,4 +139,31 @@ namespace modelMakerTest
 }
 ```
 
-Simple, isn't it? Let's make some models now!! :D
+### ModelMaker.Model.getStatus() [int] Method
+It's really necessary to check whether we are successfully connected to our database or not. ModelMaker also provides a method for that. Let's make changes to our previous example: 
+
+``` c#
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            StudentModel student = new StudentModel();
+            if(student.getStatus() == 200){
+                Console.WriteLine(student.Select().FirstOrDefault().student_name);
+            }
+            else{
+                Console.WriteLine("Failed to connect with database!");
+            }
+                       
+        }
+    }
+    
+```
+    
+This method returns two interger values:
+1. ``200`` if a successful connection occurs
+2. ``500`` if it fails to connect to databse
+
+That's it! Simple, Lightweight and Pure ADO.NET :smile:
+
