@@ -97,7 +97,10 @@ namespace modelMakerTest
 }
 ```
 
-We declare parameter variables (eg. **@studentName, @enrolledDept**) in our SQL command text and later we set values (eg. **@studentName = student_name**). Here is an another example for reading table rows:
+We declare parameter variables (eg. **@studentName, @enrolledDept**) in our SQL command text and later we set values (eg. **@studentName = student_name**).
+
+#### ModelMaker.Model.Read<T> (string query, object parameterValues) Method
+This is how we retrieve table rows from data table.
 
 ``` c#
 using ModelMaker;
