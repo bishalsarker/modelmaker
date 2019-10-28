@@ -10,7 +10,7 @@ Here, we create a class for model which will have some properties that will repr
 
 ## Installation
 To install ModelMaker from NuGet Package Manager CLI, <br><br>
-``PM> Install-Package ModelMaker -Version 1.0.0`` <br><br>
+``PM> Install-Package ModelMaker -Version 1.2.0`` <br><br>
 or, goto: https://www.nuget.org/packages/ModelMaker/
 
 
@@ -72,7 +72,7 @@ namespace modelMakerTest
             string cmdText = "insert into students(student_name, enrolled_dept) values 								 (@studentName, @enrolledDept)";
             Exec(
                 query: cmdText, 
-                parameterValues: new { @studentName = student_name, @enrolledDept = 					enrolled_dept}
+                parameterValues: new { @studentName = student_name, @enrolledDept = enrolled_dept}
             );
         }
         
@@ -81,7 +81,7 @@ namespace modelMakerTest
             string cmdText = "update students set student_name=@studentName, 										 enrolled_dept=@enrolledDept where id=@Id";
             Exec(
                 query: cmdText, 
-                parameterValues: new { @studentName = student_name, @enrolledDept = 					enrolled_dept, @Id = id}
+                parameterValues: new { @studentName = student_name, @enrolledDept = enrolled_dept, @Id = id}
             );
         }
         
