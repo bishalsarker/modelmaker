@@ -203,7 +203,7 @@ namespace modelMakerTest
               "stuName : student_name",
               "enDept : enrolled_dept"
             }
-			EntityMap map = new EntityMap(connections);          
+	    EntityMap map = new EntityMap(connections);          
             return Read<StudentModel>(query, new { @Dept = enrolled_dept}, map);
         }
     }
