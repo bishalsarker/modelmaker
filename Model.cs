@@ -31,6 +31,121 @@ namespace ModelMaker
                 setStatus(500);
             }
         }
+        public void Exec(string query, object parameterValues)
+        {
+            if (connOpen())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                PropertyInfo[] propList = parameterValues.GetType().GetProperties();
+                foreach (PropertyInfo prop in propList)
+                {
+                    SqlParameter parameter = new SqlParameter();
+                    parameter.ParameterName = prop.Name;
+                    parameter.Value = prop.GetValue(parameterValues);
+                    cmd.Parameters.Add(parameter);
+                }
+                cmd.ExecuteNonQuery();
+                setStatus(200);
+                connClose();
+            }
+            else
+            {
+                setStatus(500);
+            }
+        }
+        public List<T> Read<T>(string query)
+        {
+            List<T> objList = new List<T>();
+            Type objType = typeof(T);
+
+            if (connOpen())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    object obj = Activator.CreateInstance(objType);
+
+                    int i = 0;
+                    while (i < reader.FieldCount)
+                    {
+                        string fName = reader.GetName(i);
+                        PropertyInfo prop = objType.GetProperty(fName);
+                        if (prop != null)
+                        {
+                            prop.SetValue(obj, reader[fName] + "");
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null);
+                        }
+
+                        i++;
+                    }
+                    objList.Add((T)obj);
+                }
+                reader.Close();
+                setStatus(200);
+                connClose();
+            }
+            else
+            {
+                setStatus(500);
+            }
+
+            return objList;
+        }
+        public List<T> Read<T>(string query, object parameterValues)
+        {
+            List<T> objList = new List<T>();
+            Type objType = typeof(T);
+
+            if (connOpen())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                PropertyInfo[] propList = parameterValues.GetType().GetProperties();
+                foreach (PropertyInfo prop in propList)
+                {
+                    SqlParameter parameter = new SqlParameter();
+                    parameter.ParameterName = prop.Name;
+                    parameter.Value = prop.GetValue(parameterValues);
+                    cmd.Parameters.Add(parameter);
+                }
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    object obj = Activator.CreateInstance(objType);
+
+                    int i = 0;
+                    while (i < reader.FieldCount)
+                    {
+                        string fName = reader.GetName(i);
+                        PropertyInfo prop = objType.GetProperty(fName);
+                        if (prop != null)
+                        {
+                            prop.SetValue(obj, reader[fName] + "");
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null);
+                        }
+
+                        i++;
+                    }
+                    objList.Add((T)obj);
+                }
+                reader.Close();
+                setStatus(200);
+                connClose();
+            }
+            else
+            {
+                setStatus(500);
+            }
+
+            return objList;
+        }
         public List<T> Read<T>(string query, EntityMap entityMap)
         {
             List<T> objList = new List<T>();
@@ -39,6 +154,57 @@ namespace ModelMaker
             if (connOpen())
             {
                 SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    object obj = Activator.CreateInstance(objType);
+                    int i = 0;
+                    while (i < reader.FieldCount)
+                    {
+                        string fName = reader.GetName(i);
+                        string pName = entityMap.GetProperty(fName);
+                        PropertyInfo prop = objType.GetProperty(pName);
+                        if (prop != null)
+                        {
+                            prop.SetValue(obj, reader[fName] + "");
+                        }
+                        else
+                        {
+                            prop.SetValue(obj, null);
+                        }
+
+                        i++;
+                    }
+                    objList.Add((T)obj);
+                }
+                reader.Close();
+                setStatus(200);
+                connClose();
+            }
+            else
+            {
+                setStatus(500);
+            }
+
+            return objList;
+        }
+        public List<T> Read<T>(string query, object parameterValues, EntityMap entityMap)
+        {
+            List<T> objList = new List<T>();
+            Type objType = typeof(T);
+
+            if (connOpen())
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                PropertyInfo[] propList = parameterValues.GetType().GetProperties();
+                foreach (PropertyInfo prop in propList)
+                {
+                    SqlParameter parameter = new SqlParameter();
+                    parameter.ParameterName = prop.Name;
+                    parameter.Value = prop.GetValue(parameterValues);
+                    cmd.Parameters.Add(parameter);
+                }
+
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
