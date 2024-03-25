@@ -1,4 +1,7 @@
 # ModelMaker for SQL Server
+
+[![BuiltWithDot.Net shield](https://builtwithdot.net/project/467/modelmaker-orm-for-sql-server/badge)](https://builtwithdot.net/project/467/modelmaker-orm-for-sql-server)
+
 Welcome to the world of power and simplicity. ModelMaker is a simple and lightweight tool built on ADO.NET foundation. ModelMaker is for those who loves SQL queries and optimization. Let's start!!
 
 ### What is ModelMaker?
